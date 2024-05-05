@@ -9,6 +9,7 @@ import ContoursTab from "@/components/dashboard/tabs/ContoursTab.vue";
 import AprilTagTab from "@/components/dashboard/tabs/AprilTagTab.vue";
 import ArucoTab from "@/components/dashboard/tabs/ArucoTab.vue";
 import ObjectDetectionTab from "@/components/dashboard/tabs/ObjectDetectionTab.vue";
+import CustomMLDetectionTab from "@/components/dashboard/tabs/CustomMLDetectionTab.vue";
 import OutputTab from "@/components/dashboard/tabs/OutputTab.vue";
 import TargetsTab from "@/components/dashboard/tabs/TargetsTab.vue";
 import PnPTab from "@/components/dashboard/tabs/PnPTab.vue";
@@ -60,6 +61,10 @@ const allTabs = Object.freeze({
   map3dTab: {
     tabName: "3D",
     component: Map3DTab
+  },
+  customMLDetectionTab: {
+    tabName: "Custom ML Detection",
+    component: CustomMLDetectionTab
   }
 });
 
@@ -81,6 +86,7 @@ const getTabGroups = (): ConfigOption[][] => {
         allTabs.apriltagTab,
         allTabs.arucoTab,
         allTabs.objectDetectionTab,
+        allTabs.customMLDetectionTab,
         allTabs.outputTab
       ],
       [allTabs.targetsTab, allTabs.pnpTab, allTabs.map3dTab]
@@ -94,6 +100,7 @@ const getTabGroups = (): ConfigOption[][] => {
         allTabs.apriltagTab,
         allTabs.arucoTab,
         allTabs.objectDetectionTab,
+        allTabs.customMLDetectionTab,
         allTabs.outputTab
       ],
       [allTabs.targetsTab, allTabs.pnpTab, allTabs.map3dTab]
@@ -102,7 +109,7 @@ const getTabGroups = (): ConfigOption[][] => {
     return [
       [allTabs.inputTab],
       [allTabs.thresholdTab],
-      [allTabs.contoursTab, allTabs.apriltagTab, allTabs.arucoTab, allTabs.objectDetectionTab, allTabs.outputTab],
+      [allTabs.contoursTab, allTabs.apriltagTab, allTabs.arucoTab, allTabs.objectDetectionTab, allTabs.customMLDetectionTab, allTabs.outputTab],
       [allTabs.targetsTab, allTabs.pnpTab, allTabs.map3dTab]
     ];
   }
