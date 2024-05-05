@@ -6,7 +6,8 @@ export enum PipelineType {
   ColoredShape = 3,
   AprilTag = 4,
   Aruco = 5,
-  ObjectDetection = 6
+  ObjectDetection = 6,
+  CustomMLDetection = 7
 }
 
 export enum AprilTagFamily {
@@ -305,16 +306,40 @@ export const DefaultObjectDetectionPipelineSettings: ObjectDetectionPipelineSett
   box_thresh: 0.25
 };
 
+export interface CustomMLDetectionPipelineSettings extends PipelineSettings {
+  pipelineType: PipelineType.CustomMLDetection;
+  confidence: number;
+
+}
+export type ConfigurableCustomMLDetectionPipelineSettings = Partial<
+  Omit<CustomMLDetectionPipelineSettings, "pipelineType">
+> &
+  ConfigurablePipelineSettings;
+export const DefaultCustomMLDetectionPipelineSettings: CustomMLDetectionPipelineSettings = {
+  ...DefaultPipelineSettings,
+  pipelineType: PipelineType.CustomMLDetection,
+  cameraGain: 20,
+  targetModel: TargetModel.InfiniteRechargeHighGoalOuter,
+  ledMode: true,
+  outputShowMultipleTargets: false,
+  cameraExposure: 6,
+
+  // Main
+  confidence: 0.9,
+};
+
 export type ActivePipelineSettings =
   | ReflectivePipelineSettings
   | ColoredShapePipelineSettings
   | AprilTagPipelineSettings
   | ArucoPipelineSettings
-  | ObjectDetectionPipelineSettings;
+  | ObjectDetectionPipelineSettings
+  | CustomMLDetectionPipelineSettings;
 
 export type ActiveConfigurablePipelineSettings =
   | ConfigurableReflectivePipelineSettings
   | ConfigurableColoredShapePipelineSettings
   | ConfigurableAprilTagPipelineSettings
   | ConfigurableArucoPipelineSettings
-  | ConfigurableObjectDetectionPipelineSettings;
+  | ConfigurableObjectDetectionPipelineSettings
+  | ConfigurableCustomMLDetectionPipelineSettings;

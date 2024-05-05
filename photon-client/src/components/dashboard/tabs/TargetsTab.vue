@@ -52,6 +52,9 @@ const resetCurrentBuffer = () => {
                 <th class="text-center white--text">Class</th>
                 <th class="text-center white--text">Confidence</th>
               </template>
+              <template v-if="currentPipelineSettings.pipelineType === PipelineType.CustomMLDetection">
+                <th class="text-center white--text">Confidence</th>
+              </template>
               <template v-if="!useCameraSettingsStore().currentPipelineSettings.solvePNPEnabled">
                 <th class="text-center white--text">Pitch &theta;&deg;</th>
                 <th class="text-center white--text">Yaw &theta;&deg;</th>
@@ -97,6 +100,12 @@ const resetCurrentBuffer = () => {
               </td>
               <td
                 v-if="currentPipelineSettings.pipelineType === PipelineType.ObjectDetection"
+                class="text-center white--text"
+              >
+                {{ target.confidence.toFixed(2) }}
+              </td>
+              <td
+                v-if="currentPipelineSettings.pipelineType === PipelineType.CustomMLDetection"
                 class="text-center white--text"
               >
                 {{ target.confidence.toFixed(2) }}

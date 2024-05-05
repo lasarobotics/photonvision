@@ -125,6 +125,8 @@ const tabGroups = computed<ConfigOption[][]>(() => {
   const isAruco = useCameraSettingsStore().currentWebsocketPipelineType === WebsocketPipelineType.Aruco;
   const isObjectDetection =
     useCameraSettingsStore().currentWebsocketPipelineType === WebsocketPipelineType.ObjectDetection;
+  const isCustomMLDetection = 
+    useCameraSettingsStore().currentWebsocketPipelineType === WebsocketPipelineType.CustomMLDetection;
 
   return getTabGroups()
     .map((tabGroup) =>
@@ -132,10 +134,11 @@ const tabGroups = computed<ConfigOption[][]>(() => {
         (tabConfig) =>
           !(!allow3d && tabConfig.tabName === "3D") && //Filter out 3D tab any time 3D isn't calibrated
           !((!allow3d || isAprilTag || isAruco || isObjectDetection) && tabConfig.tabName === "PnP") && //Filter out the PnP config tab if 3D isn't available, or we're doing AprilTags
-          !((isAprilTag || isAruco || isObjectDetection) && tabConfig.tabName === "Threshold") && //Filter out threshold tab if we're doing AprilTags
-          !((isAprilTag || isAruco || isObjectDetection) && tabConfig.tabName === "Contours") && //Filter out contours if we're doing AprilTags
+          !((isAprilTag || isAruco || isObjectDetection || isCustomMLDetection) && tabConfig.tabName === "Threshold") && //Filter out threshold tab if we're doing AprilTags
+          !((isAprilTag || isAruco || isObjectDetection || isCustomMLDetection) && tabConfig.tabName === "Contours") && //Filter out contours if we're doing AprilTags
           !(!isAprilTag && tabConfig.tabName === "AprilTag") && //Filter out apriltag unless we actually are doing AprilTags
-          !(!isAruco && tabConfig.tabName === "Aruco") &&
+          !(!isDNN && tabConfig.tabName === "DNN") && //Filter out dnn unless we actually are doing DNN things
+          !(!isCustomMLDetection && tabConfig.tabName === "Custom ML Detection") &&
           !(!isObjectDetection && tabConfig.tabName === "Object Detection") //Filter out aruco unless we actually are doing Aruco
       )
     )
