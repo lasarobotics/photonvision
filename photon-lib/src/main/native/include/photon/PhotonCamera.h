@@ -26,6 +26,7 @@
 
 #include <memory>
 #include <string>
+#include <vector>
 
 #include <networktables/BooleanTopic.h>
 #include <networktables/DoubleArrayTopic.h>
@@ -148,12 +149,25 @@ class PhotonCamera {
    */
   const std::string_view GetCameraName() const;
 
-  std::optional<cv::Mat> GetCameraMatrix();
-  std::optional<cv::Mat> GetDistCoeffs();
+  using CameraMatrix = Eigen::Matrix<double, 3, 3>;
+  using DistortionMatrix = Eigen::Matrix<double, 8, 1>;
 
-  inline static void SetVersionCheckEnabled(bool enabled) {
-    PhotonCamera::VERSION_CHECK_ENABLED = enabled;
-  }
+  /**
+   * @brief Get the camera calibration matrix, in standard OpenCV form
+   *
+   * @return std::optional<cv::Mat>
+   */
+  std::optional<CameraMatrix> GetCameraMatrix();
+
+  /**
+   * @brief Get the camera calibration distortion coefficients, in OPENCV8 form.
+   * Higher order terms are set to zero.
+   *
+   * @return std::optional<cv::Mat>
+   */
+  std::optional<DistortionMatrix> GetDistCoeffs();
+
+  static void SetVersionCheckEnabled(bool enabled);
 
   std::shared_ptr<nt::NetworkTable> GetCameraTable() const { return rootTable; }
 
@@ -182,19 +196,21 @@ class PhotonCamera {
   nt::BooleanPublisher driverModePublisher;
   nt::IntegerSubscriber ledModeSubscriber;
 
-  nt::MultiSubscriber m_topicNameSubscriber;
+  nt::MultiSubscriber topicNameSubscriber;
 
   std::string path;
-  std::string m_cameraName;
+  std::string cameraName;
 
   mutable Packet packet;
 
  private:
   units::second_t lastVersionCheckTime = 0_s;
-  inline static bool VERSION_CHECK_ENABLED = true;
+  static bool VERSION_CHECK_ENABLED;
   inline static int InstanceCount = 0;
 
   void VerifyVersion();
+
+  std::vector<std::string> tablesThatLookLikePhotonCameras();
 };
 
 }  // namespace photon
