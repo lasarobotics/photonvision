@@ -24,7 +24,7 @@ import org.photonvision.vision.frame.FrameThresholdType;
 import org.photonvision.vision.opencv.DualOffsetValues;
 import org.photonvision.vision.pipe.CVPipe.CVPipeResult;
 import org.photonvision.vision.pipe.impl.*;
-import org.photonvision.vision.pipe.impl.RknnDetectionPipe.RknnDetectionPipeParams;
+import org.photonvision.vision.pipe.impl.PyTorchDetectionPipe.PyTorchDetectionPipeParams;
 import org.photonvision.vision.pipeline.result.CVPipelineResult;
 import org.photonvision.vision.target.PotentialTarget;
 import org.photonvision.vision.target.TargetOrientation;
@@ -33,7 +33,8 @@ import org.photonvision.vision.target.TrackedTarget;
 public class ObjectDetectionPipeline
         extends CVPipeline<CVPipelineResult, ObjectDetectionPipelineSettings> {
     private final CalculateFPSPipe calculateFPSPipe = new CalculateFPSPipe();
-    private final RknnDetectionPipe rknnPipe = new RknnDetectionPipe();
+//     private final RknnDetectionPipe rknnPipe = new RknnDetectionPipe();
+    private final PyTorchDetectionPipe torchPipe = new PyTorchDetectionPipe();
     private final SortContoursPipe sortContoursPipe = new SortContoursPipe();
     private final Collect2dTargetsPipe collect2dTargetsPipe = new Collect2dTargetsPipe();
     private final FilterObjectDetectionsPipe filterContoursPipe = new FilterObjectDetectionsPipe();
@@ -53,10 +54,10 @@ public class ObjectDetectionPipeline
     @Override
     protected void setPipeParamsImpl() {
         // this needs to be based off of the current backend selected!!
-        var params = new RknnDetectionPipeParams();
+        var params = new PyTorchDetectionPipeParams();
         params.confidence = settings.confidence;
         params.nms = settings.nms;
-        rknnPipe.setParams(params);
+        torchPipe.setParams(params);
 
         DualOffsetValues dualOffsetValues =
                 new DualOffsetValues(
@@ -97,11 +98,11 @@ public class ObjectDetectionPipeline
 
         // ***************** change based on backend ***********************
 
-        CVPipeResult<List<NeuralNetworkPipeResult>> rknnResult = rknnPipe.run(input_frame.colorImage);
+        CVPipeResult<List<NeuralNetworkPipeResult>> rknnResult = torchPipe.run(input_frame.colorImage);
         sumPipeNanosElapsed += rknnResult.nanosElapsed;
         List<NeuralNetworkPipeResult> targetList;
 
-        var names = rknnPipe.getClassNames();
+        var names = torchPipe.getClassNames();
 
         input_frame.colorImage.getMat().copyTo(input_frame.processedImage.getMat());
 
@@ -130,7 +131,7 @@ public class ObjectDetectionPipeline
 
     @Override
     public void release() {
-        rknnPipe.release();
+        torchPipe.release();
         super.release();
     }
 }
