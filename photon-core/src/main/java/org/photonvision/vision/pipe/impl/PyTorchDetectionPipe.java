@@ -62,25 +62,6 @@ public class PyTorchDetectionPipe
         var ret = detector.detect(letterboxed, params.nms, params.confidence);
         letterboxed.release();
 
-        return resizeDetections(ret, scale);
-    }
-
-    private List<NeuralNetworkPipeResult> resizeDetections(
-            List<NeuralNetworkPipeResult> unscaled, Letterbox letterbox) {
-        var ret = new ArrayList<NeuralNetworkPipeResult>();
-
-        for (var t : unscaled) {
-            var scale = 1.0 / letterbox.scale;
-            var boundingBox = t.bbox;
-            double x = (boundingBox.x - letterbox.dx) * scale;
-            double y = (boundingBox.y - letterbox.dy) * scale;
-            double width = boundingBox.width * scale;
-            double height = boundingBox.height * scale;
-
-            ret.add(
-                    new NeuralNetworkPipeResult(new Rect2d(x, y, width, height), t.classIdx, t.confidence));
-        }
-
         return ret;
     }
 

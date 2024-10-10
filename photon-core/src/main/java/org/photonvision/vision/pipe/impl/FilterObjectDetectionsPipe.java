@@ -47,12 +47,15 @@ public class FilterObjectDetectionsPipe
         double areaPercentage = boc.area() / params.getFrameStaticProperties().imageArea * 100.0;
         double minAreaPercentage = params.getArea().getFirst();
         double maxAreaPercentage = params.getArea().getSecond();
-        if (areaPercentage < minAreaPercentage || areaPercentage > maxAreaPercentage) return;
+        if (areaPercentage < minAreaPercentage || areaPercentage > maxAreaPercentage) {
+            // System.out.println((areaPercentage < minAreaPercentage) + " " + (areaPercentage > maxAreaPercentage) + " " + areaPercentage + " " + boc.area() + " " + params.getFrameStaticProperties().imageArea * 100.0);
+            // System.out.println(params.getFrameStaticProperties().imageWidth + " " + params.getFrameStaticProperties().imageHeight + " " + params.getFrameStaticProperties().imageArea);
+            return;
+        }
 
         // Aspect ratio filtering; much simpler since always axis-aligned
         double aspectRatio = boc.width / boc.height;
-        if (aspectRatio < params.getRatio().getFirst() || aspectRatio > params.getRatio().getSecond())
-            return;
+        if (aspectRatio < params.getRatio().getFirst() || aspectRatio > params.getRatio().getSecond()) return;
 
         m_filteredContours.add(contour);
     }

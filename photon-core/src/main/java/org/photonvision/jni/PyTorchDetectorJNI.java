@@ -75,8 +75,8 @@ public class PyTorchDetectorJNI extends PhotonJNICommon {
          *     threshold
          */
         public List<NeuralNetworkPipeResult> detect(Mat in, double nmsThresh, double boxThresh) {
-            List<NeuralNetworkPipeResult> tempResult = new ArrayList<NeuralNetworkPipeResult>();
-            tempResult.add(new NeuralNetworkPipeResult(new Rect2d(10, 10, 10, 10), 0, 0.9));
+            List<NeuralNetworkPipeResult> tempResult = new ArrayList<NeuralNetworkPipeResult>();            
+            tempResult.add(new NeuralNetworkPipeResult(new Rect2d(10, 10, 50, 60), 0, 0.95));
             return tempResult;
         }
 

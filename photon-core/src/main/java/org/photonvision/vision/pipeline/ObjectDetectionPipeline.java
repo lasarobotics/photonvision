@@ -107,7 +107,6 @@ public class ObjectDetectionPipeline
         input_frame.colorImage.getMat().copyTo(input_frame.processedImage.getMat());
 
         // ***************** change based on backend ***********************
-
         var filterContoursResult = filterContoursPipe.run(rknnResult.output);
         sumPipeNanosElapsed += filterContoursResult.nanosElapsed;
 
