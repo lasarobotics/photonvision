@@ -17,17 +17,17 @@
 
 package org.photonvision.jni;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.stream.Collectors;
+import java.util.concurrent.CompletableFuture;
+
 import org.opencv.core.Mat;
 import org.opencv.core.Rect2d;
 import org.photonvision.common.logging.LogGroup;
 import org.photonvision.common.logging.Logger;
-import org.photonvision.common.util.TestUtils;
 import org.photonvision.vision.pipe.impl.NeuralNetworkPipeResult;
 
 public class PyTorchDetectorJNI extends PhotonJNICommon {
@@ -57,8 +57,36 @@ public class PyTorchDetectorJNI extends PhotonJNICommon {
 
     public static class PyTorchObjectDetector {
         private List<String> labels;
+        ProcessBuilder processBuilder;
+        Process pythonScript;
 
         public PyTorchObjectDetector(String modelPath, List<String> labels) {
+            // Path to your Python script
+            String scriptPath = "../test.py";
+
+            processBuilder = new ProcessBuilder("python", scriptPath);
+
+            CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
+                try {
+                    // Start the process
+                    pythonScript = processBuilder.start();
+
+                    // Read and print the output of the Python script
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(pythonScript.getInputStream()));
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        System.out.println(line);
+                    }
+
+                    // Wait for the process to complete
+                    int exitCode = pythonScript.waitFor();
+                    System.out.println("Python script exited with code: " + exitCode);
+
+                } catch (IOException | InterruptedException e) {
+                    e.printStackTrace();
+                }
+            });
+
             this.labels = labels;
         }
 
@@ -81,7 +109,9 @@ public class PyTorchDetectorJNI extends PhotonJNICommon {
         }
 
         public void release() {
-
+            if (pythonScript != null && pythonScript.isAlive()) {
+                pythonScript.destroy();
+            }
         }
     }
 }
