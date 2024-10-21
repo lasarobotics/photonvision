@@ -1,0 +1,3 @@
+[submodule "photon-core/src/main/java/org/photonvision/vision/python/model"]
+	path = photon-core/src/main/java/org/photonvision/vision/python/model
+	url = https://github.com/ultralytics/yolov5
