@@ -1,4 +1,5 @@
 syntax = "proto3";
+package customobjectdetection;
 
 enum ImageFormat {
     FORMAT_UNSPECIFIED = 0;

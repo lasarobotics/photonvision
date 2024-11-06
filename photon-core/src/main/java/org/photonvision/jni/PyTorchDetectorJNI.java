@@ -30,6 +30,11 @@ import org.photonvision.common.logging.LogGroup;
 import org.photonvision.common.logging.Logger;
 import org.photonvision.vision.pipe.impl.NeuralNetworkPipeResult;
 
+import io.grpc.ManagedChannel;
+import io.grpc.ManagedChannelBuilder;
+
+import customobjectdetection.ObjectDetectionRequest;
+
 public class PyTorchDetectorJNI extends PhotonJNICommon {
     private static final Logger logger = new Logger(PyTorchDetectorJNI.class, LogGroup.General);
     private boolean isLoaded;
@@ -87,6 +92,14 @@ public class PyTorchDetectorJNI extends PhotonJNICommon {
                 }
             });
 
+            // Set up the channel
+            ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 50051)
+                .usePlaintext() // Insecure connection, you can use TLS if needed
+                .build();
+
+            // Create a blocking stub
+            GreeterGrpc.GreeterBlockingStub stub = GreeterGrpc.newBlockingStub(channel);
+
             this.labels = labels;
         }
 
@@ -103,6 +116,7 @@ public class PyTorchDetectorJNI extends PhotonJNICommon {
          *     threshold
          */
         public List<NeuralNetworkPipeResult> detect(Mat in, double nmsThresh, double boxThresh) {
+            ObjectDetectionRequest request.newBuilder().setImageBuilder("World").build();
             List<NeuralNetworkPipeResult> tempResult = new ArrayList<NeuralNetworkPipeResult>();            
             tempResult.add(new NeuralNetworkPipeResult(new Rect2d(10, 10, 50, 60), 0, 0.95));
             return tempResult;
