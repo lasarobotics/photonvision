@@ -36,7 +36,6 @@ message ObjectDetectionResponse {
     DetectionResults results = 1;
 }
 
-
 service ObjectDetectionService {
     rpc ObjectDetection(ObjectDetectionRequest) returns (ObjectDetectionResponse);
 }

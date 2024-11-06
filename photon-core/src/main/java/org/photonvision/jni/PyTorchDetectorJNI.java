@@ -62,9 +62,9 @@ public class PyTorchDetectorJNI extends PhotonJNICommon {
 
         public PyTorchObjectDetector(String modelPath, List<String> labels) {
             // Path to your Python script
-            String scriptPath = "../test.py";
+            String scriptPath = "../photon-core/src/main/java/org/photonvision/vision/server.py";
 
-            processBuilder = new ProcessBuilder("python", scriptPath);
+            processBuilder = new ProcessBuilder("python3.11", scriptPath);
 
             CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
                 try {

@@ -80,6 +80,7 @@ public abstract class CVPipeline<R extends CVPipelineResult, S extends CVPipelin
         //     return (R) new CVPipelineResult(0, 0, List.of(), frame);
         // }
         R result = process(frame, settings);
+        System.out.println("get frame " + frame.timestampNanos + " " + frame.frameStaticProperties.imageArea);
 
         result.setImageCaptureTimestampNanos(frame.timestampNanos);
 
