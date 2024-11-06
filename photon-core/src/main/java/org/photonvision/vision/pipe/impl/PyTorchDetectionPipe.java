@@ -16,6 +16,8 @@ import org.photonvision.vision.opencv.CVMat;
 import org.photonvision.vision.opencv.Releasable;
 import org.photonvision.vision.pipe.CVPipe;
 
+import customobjectdetection.ObjectDetectionRequest;
+
 public class PyTorchDetectionPipe 
         extends CVPipe<CVMat, List<NeuralNetworkPipeResult>, PyTorchDetectionPipe.PyTorchDetectionPipeParams>
         implements Releasable {
@@ -59,6 +61,8 @@ public class PyTorchDetectionPipe
             // huh whack give up lol
             throw new RuntimeException("RGA bugged but still wrong size");
         }
+        
+        ObjectDetectionRequest request = ObjectDetectionRequest.newBuilder().setImage(frame).build();
         var ret = detector.detect(letterboxed, params.nms, params.confidence);
         letterboxed.release();
 

@@ -33,8 +33,6 @@ import org.photonvision.vision.pipe.impl.NeuralNetworkPipeResult;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 
-import customobjectdetection.ObjectDetectionRequest;
-
 public class PyTorchDetectorJNI extends PhotonJNICommon {
     private static final Logger logger = new Logger(PyTorchDetectorJNI.class, LogGroup.General);
     private boolean isLoaded;
@@ -116,7 +114,6 @@ public class PyTorchDetectorJNI extends PhotonJNICommon {
          *     threshold
          */
         public List<NeuralNetworkPipeResult> detect(Mat in, double nmsThresh, double boxThresh) {
-            ObjectDetectionRequest request.newBuilder().setImageBuilder("World").build();
             List<NeuralNetworkPipeResult> tempResult = new ArrayList<NeuralNetworkPipeResult>();            
             tempResult.add(new NeuralNetworkPipeResult(new Rect2d(10, 10, 50, 60), 0, 0.95));
             return tempResult;
