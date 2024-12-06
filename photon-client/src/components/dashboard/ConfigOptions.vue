@@ -25,6 +25,10 @@ const allTabs = Object.freeze({
     tabName: "Input",
     component: InputTab
   },
+  blacklistTab: {
+    tabName: "aprilTagBlacklist",
+    component: InputTab
+  },
   thresholdTab: {
     tabName: "Threshold",
     component: ThresholdTab
@@ -64,6 +68,18 @@ const allTabs = Object.freeze({
 });
 
 const selectedTabs = ref([0, 0, 0, 0]);
+const aprilTagBlacklist = ref<string[]>([]);
+
+const addToBlacklist = (tag: string) => {
+  if (tag && !aprilTagBlacklist.value.includes(tag)) {
+    aprilTagBlacklist.value.push(tag);
+  }
+};
+
+const removeFromBlacklist = (tag: string) => {
+  aprilTagBlacklist.value = aprilTagBlacklist.value.filter((t) => t !== tag);
+};
+
 const getTabGroups = (): ConfigOption[][] => {
   const smAndDown = getCurrentInstance()?.proxy.$vuetify.breakpoint.smAndDown || false;
   const mdAndDown = getCurrentInstance()?.proxy.$vuetify.breakpoint.mdAndDown || false;
